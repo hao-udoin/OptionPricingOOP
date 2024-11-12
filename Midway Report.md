@@ -8,9 +8,9 @@ Project Overview
 The goal of this project is to develop a flexible and extensible C++ program for option pricing. Currently, the focus is on implementing the Binomial Tree model as a foundation, but the project is designed to accommodate other models in the future. This project aims to provide a robust framework for option pricing that can be expanded to handle various option types and pricing methodologies.
 
 
-The project is divided into two main components:
+The project is now divided into two main components:
 
-1.  **Option Class**: This class encapsulates the basic properties of an option, such as strike price, maturity, risk-free interest rate, volatility, and option type (call or put).
+1.  **Option Class**: This class contains the basic properties of an option, such as strike price, maturity, risk-free interest rate, volatility, and option type (call or put).
 2.  **Binomial Tree Class**: This class implements the Binomial Tree model to calculate the price of the option by building a price tree and back-propagating the option values.
 
 Project Structure
@@ -69,8 +69,9 @@ Future Work
 
 1.  **Extending to American Options**: The next step is to adapt the `BinomialTree` class to support American options. This will involve adding a condition to allow for early exercise at each node during backward induction.
 2.  **Refactoring Code for Modularity**: Splitting the code into separate `.cpp` and `.hpp` files for better modularity and readability.
-3.  **Adding Monte Carlo Simulation**: Implementing Monte Carlo simulation as an alternative method for option pricing.
-4.  **User Interface**: Developing a command-line or graphical user interface to allow users to input option parameters interactively.
+3.  **Adding Black-Scholes model**: Implementing Black-sholes model as an alternative method for option pricing. 
+4.  **Adding Monte Carlo Simulation**: Implementing Monte Carlo simulation as an alternative method for option pricing.
+5.  **User Interface**: Developing a command-line or graphical user interface to allow users to input option parameters interactively.
 
 Conclusion
 ----------
