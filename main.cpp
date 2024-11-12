@@ -5,16 +5,16 @@
 int main() {
     double spotPrice = 100.0;
     double strikePrice = 100.0;
-    double expiry = 1.0;          // 一年
-    double riskFreeRate = 0.05;   // 5%
-    double volatility = 0.2;      // 20%
-    int steps = 100;              // 時間步驟數
+    double maturity = 1.0;          
+    double riskFreeRate = 0.05;  
+    double volatility = 0.2;      
+    int steps = 100;              
 
-    Option callOption(strikePrice, expiry, riskFreeRate, volatility, true);
+    Option callOption(strikePrice, maturity, riskFreeRate, volatility, true);
     BinomialTree tree;
-    double callPrice = tree.price(callOption, steps);
+    double price = tree.price(callOption, steps);
 
-    std::cout << "European Call Option Price (Binomial Tree): " << callPrice << std::endl;
+    std::cout << "European Option Price (Binomial Tree): " << price << std::endl;
 
     return 0;
 }
