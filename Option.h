@@ -48,6 +48,11 @@ public:
 
         for (int step = steps - 1; step >= 0; --step) {
             for (int i = 0; i <= step; ++i) {
+                double spotPriceAtNode = option.getStrikePrice() * std::pow(upFactor, step - i) * std::pow(downFactor, i);
+                double holdValue = (p * optionValues[i] + (1 - p) * optionValues[i + 1]) * std::exp(-option.getRiskFreeRate() * deltaT);
+                double exerciseValue = option.isCallOption() ?
+                    std::max(0.0, spotPriceAtNode - option.getStrikePrice()) :
+                    std::max(0.0, option.getStrikePrice() - spotPriceAtNode);
                 optionValues[i] = (p * optionValues[i] + (1 - p) * optionValues[i + 1])
                                   * std::exp(-option.getRiskFreeRate() * deltaT);
             }
