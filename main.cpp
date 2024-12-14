@@ -1,6 +1,7 @@
 // main.cpp
 #include <iostream>
 #include "Option.h"
+#include "BlackSholes.hpp"
 
 int main() {
     double spotPrice = 100.0;
@@ -11,6 +12,7 @@ int main() {
     int steps = 100;              
 
     Option callOption(strikePrice, maturity, riskFreeRate, volatility, true);
+    Blacksholes BlackSholes(strikePrice, maturity, riskFreeRate, volatility, true);
     BinomialTree tree;
     double price = tree.price(callOption, steps);
 
