@@ -12,7 +12,7 @@ class OptionBase {
         double q=0; // the rate of dividend yield (assumed continuous, per annum)
     
     public:
-        OptoinBase(double s, double k, double t, double sigma, double r, double q)
+        OptionBase(double s, double k, double t, double sigma, double r, double q)
             : s(s), k(k), t(t), sigma(sigma), r(r), q(q)
         
         virtual ~OptionBase() {}
