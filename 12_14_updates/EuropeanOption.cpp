@@ -1,5 +1,9 @@
 #include <cmath>
 #include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
 
 #include "EuropeanOption.h"
 
@@ -31,10 +35,51 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     double d = 1 / u;
     double p = (exp((r-q)*dt) - d) / (u-d);
 
-    // generate final prices
-    std::vector<double> prices(n_steps + 1);
-    prices[0] = s * pow(u, i)
-    for (int i = 0; i <= steps; ++i) {
-        prices[i] = 
+     // Generate terminal prices
+    vector<double> prices(n_steps + 1);
+    for (int i = 0; i <= n_steps; ++i) {
+        prices[i] = s * pow(u, n_steps - i) * pow(d, i);
     }
+
+    // Generate option values at terminal nodes
+    vector<double> optionValues(n_steps + 1);
+    for (int i = 0; i <= n_steps; ++i) {
+        if (isCall) {
+            optionValues[i] = max(0.0, prices[i] - k);
+        } else {
+            optionValues[i] = max(0.0, k - prices[i]);
+        }
+    }
+
+    // Backward induction through the tree
+    for (int step = n_steps - 1; step >= 0; --step) {
+        for (int i = 0; i <= step; ++i) {
+            double hold = exp(-r * dt) * (p * optionValues[i] + (1 - p) * optionValues[i + 1]);
+            if (isAmerican) {
+                double exercise;
+                if (isCall) {
+                    exercise = max(0.0, prices[i] - k);
+                } else {
+                    exercise = max(0.0, k - prices[i]);
+                }
+                optionValues[i] = max(hold, exercise);
+            } else {
+                optionValues[i] = hold;
+            }
+            prices[i] = prices[i] / u; // Move one step backward in the tree
+        }
+    }
+
+    // Return the option price at the root of the tree
+    double binomialPrice = optionValues[0];
+
+    // Compare with Black-Scholes if European option
+    if (!isAmerican) {
+        double bsPrice = priceBlackScholes();
+        cout << "Binomial Tree Price: " << binomialPrice << "\n";
+        cout << "Black-Scholes Price: " << bsPrice << "\n";
+        cout << "Difference: " << fabs(binomialPrice - bsPrice) << "\n";
+    }
+
+    return binomialPrice;
 }
