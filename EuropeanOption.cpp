@@ -10,18 +10,18 @@ EuropeanOption::EuropeanOption(bool isCall, double s, double k, double t, double
     : OptionBase(isCall,s, k, t, sigma, r, q) {}
 
 double normalCDF(double x) {
-    return erfc(-x/sqrt(2)) / 2;
+    return std::erfc(-x/sqrt(2)) / 2;
 }
 
 double EuropeanOption::priceBlackScholes() {
-    double d1 = log(s/k) + (r - q + pow(sigma, 2)/2) * t;
-    double d2 = d1 - sigma * sqrt(t);
+    double d1 = std::log(s/k) + (r - q + std::pow(sigma, 2)/2) * t;
+    double d2 = d1 - sigma * std::sqrt(t);
 
     double price;
     if (isCall) {
-        price = s * exp(-q*t) * normalCDF(d1) - k * exp(-r*t) * normalCDF(d2);
+        price = s * std::exp(-q*t) * normalCDF(d1) - k * std::exp(-r*t) * normalCDF(d2);
     } else {
-        price = - s * exp(-q*t) * normalCDF(-d1) + k * exp(-r*t) * normalCDF(-d2);
+        price = - s * std::exp(-q*t) * normalCDF(-d1) + k * std::exp(-r*t) * normalCDF(-d2);
     }
     return price;
 }
@@ -30,19 +30,19 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     dt = t / n_steps;
 
     // volatility matching as by CRR
-    double u = exp(-sigma / sqrt(dt));
+    double u = std::exp(-sigma / sqrt(dt));
     double d = 1 / u;
-    double p = (exp((r-q)*dt) - d) / (u-d);
+    double p = (std::exp((r-q)*dt) - d) / (u-d);
 
      // generate stock prices at terminal nodes
-    vector<double> prices(n_steps + 1);
-    prices[0] = pow(u, n_steps)
+    std::vector<double> prices(n_steps + 1);
+    prices[0] = std::pow(u, n_steps)
     for (int i = 1; i <= n_steps; ++i) {
         prices[i] = prices[i-1] * d;
     }
 
     // generate option values at terminal nodes
-    vector<double> binomialValues(n_steps + 1);
+    std::vector<double> binomialValues(n_steps + 1);
     if (isCall){
         for (int i = 0; i <= n_steps; ++i) {
             bionomialValues[i] = max(0, prices[i] - k);
@@ -59,7 +59,7 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
         for (i = 0; i <= j; ++i) {
             binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValus[i+1];
             // discount by rates given
-            binomialValues[i] *= exp((q-r) * dt);
+            binomialValues[i] *= std::exp((q-r) * dt);
         }
     }
 
