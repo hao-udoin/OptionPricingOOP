@@ -1,6 +1,7 @@
 #include <cmath>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -10,12 +11,13 @@ EuropeanOption::EuropeanOption(bool isCall, double s, double k, double t, double
     : OptionBase(isCall,s, k, t, sigma, r, q) {}
 
 double normalCDF(double x) {
-    return std::erfc(-x/sqrt(2)) / 2;
+    return std::erfc(-x/std::sqrt(2)) / 2;
 }
 
 double EuropeanOption::priceBlackScholes() {
-    double d1 = std::log(s/k) + (r - q + std::pow(sigma, 2)/2) * t;
+    double d1 = (std::log(s / k) + (r - q + 0.5 * std::pow(sigma, 2)) * t) / (sigma * std::sqrt(t));
     double d2 = d1 - sigma * std::sqrt(t);
+
 
     double price;
     if (isCall) {
@@ -30,15 +32,18 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     double dt = t / n_steps;
 
     // volatility matching as by CRR
-    double u = std::exp(-sigma / sqrt(dt));
+    double u = std::exp(sigma * std::sqrt(dt));
     double d = 1 / u;
     double p = (std::exp((r-q)*dt) - d) / (u-d);
 
-     // generate stock prices at terminal nodes
+    std::cout << "u: " << std::fixed << std::setprecision(2) << u 
+              << " d: " << d << " p: " << p << std::endl;
+
+    // generate stock prices at terminal nodes
     std::vector<double> prices(n_steps + 1);
-    prices[0] = std::pow(u, n_steps);
+    prices[0] = s * std::pow(u, n_steps);
     for (int i = 1; i <= n_steps; ++i) {
-        prices[i] = prices[i-1] * d;
+        prices[i] = prices[i-1] * d * d;
     }
 
     // generate option values at terminal nodes
@@ -52,12 +57,11 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
             binomialValues[i] = std::max(0.0, k - prices[i]);
         }
     }
-    std::cout << binomialValues << std::endl;
 
     // back step (calculate binomialValues at preceding levels) until root
     for (int j = n_steps; j >= 1; --j) {
         // at each step, update binomialValues at each level
-        for (int i = 0; i <= j; ++i) {
+        for (int i = 0; i < j; ++i) {
             binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValues[i+1];
             // discount by rates given
             binomialValues[i] *= std::exp((q-r) * dt);
@@ -67,3 +71,4 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     // return the option price at the root of the tree
     return binomialValues[0];
 }
+

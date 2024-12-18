@@ -20,13 +20,25 @@ void testOptionPricing() {
 
     // Price European option using Black-Scholes
     double bsPrice = euroCall.priceBlackScholes();
-    std::cout << "European Call (Black-Scholes): " << bsPrice << std::endl;
+    std::cout << "European Call (Black-Scholes): " << std::endl;
+    std::cout << "Price: " << bsPrice << std::endl;
+    std::cout << std::endl;
 
     // Price European option using binomial tree with increasing steps
-    std::vector<int> steps = {10, 50, 100, 500, 1000};
+    std::vector<int> steps = {1, 2, 10};
     for (int n : steps) {
+        std::cout << "European Call (Binomial Tree, " << n << " steps): " << std::endl;
         double binomialPrice = euroCall.priceBinomialTree(n);
-        std::cout << "European Call (Binomial Tree, " << n << " steps): " << binomialPrice << std::endl;
+        std::cout << "Price: " << binomialPrice << std::endl;
+        std::cout << std::endl;
+    }
+
+    // Price American option using binomial tree with increasing steps
+    for (int n : steps) {
+        std::cout << "American Call (Binomial Tree, " << n << " steps): " << std::endl;
+        double binomialPrice = amerCall.priceBinomialTree(n);
+        std::cout << "Price: " << binomialPrice << std::endl;
+        std::cout << std::endl;
     }
 }
 
