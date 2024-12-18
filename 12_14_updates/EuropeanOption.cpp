@@ -1,6 +1,5 @@
 #include <cmath>
 #include <vector>
-#include <algorithm>
 #include <iostream>
 
 using namespace std;
@@ -35,51 +34,35 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     double d = 1 / u;
     double p = (exp((r-q)*dt) - d) / (u-d);
 
-     // Generate terminal prices
+     // generate stock prices at terminal nodes
     vector<double> prices(n_steps + 1);
-    for (int i = 0; i <= n_steps; ++i) {
-        prices[i] = s * pow(u, n_steps - i) * pow(d, i);
+    prices[0] = pow(u, n_steps)
+    for (int i = 1; i <= n_steps; ++i) {
+        prices[i] = prices[i-1] * d;
     }
 
-    // Generate option values at terminal nodes
-    vector<double> optionValues(n_steps + 1);
-    for (int i = 0; i <= n_steps; ++i) {
-        if (isCall) {
-            optionValues[i] = max(0.0, prices[i] - k);
-        } else {
-            optionValues[i] = max(0.0, k - prices[i]);
+    // generate option values at terminal nodes
+    vector<double> binomialValues(n_steps + 1);
+    if (isCall){
+        for (int i = 0; i <= n_steps; ++i) {
+            bionomialValues[i] = max(0, prices[i] - k);
+        }
+    } else {
+        for (int i = 0; i <= n_steps; ++i) {
+            bionomialValues[i] = max(0, k - prices[i]);
         }
     }
 
-    // Backward induction through the tree
-    for (int step = n_steps - 1; step >= 0; --step) {
-        for (int i = 0; i <= step; ++i) {
-            double hold = exp(-r * dt) * (p * optionValues[i] + (1 - p) * optionValues[i + 1]);
-            if (isAmerican) {
-                double exercise;
-                if (isCall) {
-                    exercise = max(0.0, prices[i] - k);
-                } else {
-                    exercise = max(0.0, k - prices[i]);
-                }
-                optionValues[i] = max(hold, exercise);
-            } else {
-                optionValues[i] = hold;
-            }
-            prices[i] = prices[i] / u; // Move one step backward in the tree
+    // back step (calculate binomialValues at preceding levels) until root
+    for (j = n_steps; j >= 1; --j) {
+        // at each step, update binomialValues at each level
+        for (i = 0; i <= j; ++i) {
+            binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValus[i+1];
+            // discount by rates given
+            binomialValues[i] *= exp((q-r) * dt);
         }
     }
 
-    // Return the option price at the root of the tree
-    double binomialPrice = optionValues[0];
-
-    // Compare with Black-Scholes if European option
-    if (!isAmerican) {
-        double bsPrice = priceBlackScholes();
-        cout << "Binomial Tree Price: " << binomialPrice << "\n";
-        cout << "Black-Scholes Price: " << bsPrice << "\n";
-        cout << "Difference: " << fabs(binomialPrice - bsPrice) << "\n";
-    }
-
-    return binomialPrice;
+    // return the option price at the root of the tree
+    return binomialValues[0];
 }
