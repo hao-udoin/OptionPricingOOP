@@ -7,7 +7,7 @@ class AmericanOption : public OptionBase {
     public:
         AmericanOption(bool isCall, double s, double k, double t, double sigma, double r, double q);
     
-        double priceBlackScholes();
+        void priceBlackScholes();
         double priceBinomialTree(int n_steps);
 
     private:

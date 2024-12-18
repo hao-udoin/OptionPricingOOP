@@ -12,7 +12,7 @@ void testOptionPricing() {
     double T = 1.0;    // Time to expiration (in years)
     double r = 0.05;   // Risk-free rate
     double sigma = 0.2; // Volatility
-    double q = 0.02;   // Dividend yield
+    double q = 0;   // Dividend yield
 
     // Create European and American options
     EuropeanOption euroCall(true, S, K, T, sigma, r, q);
@@ -22,11 +22,11 @@ void testOptionPricing() {
     double bsPrice = euroCall.priceBlackScholes();
     std::cout << "European Call (Black-Scholes): " << bsPrice << std::endl;
 
-    // Price American option using binomial tree with increasing steps
+    // Price European option using binomial tree with increasing steps
     std::vector<int> steps = {10, 50, 100, 500, 1000};
     for (int n : steps) {
-        double binomialPrice = amerCall.priceBinomialTree(n);
-        std::cout << "American Call (Binomial Tree, " << n << " steps): " << binomialPrice << std::endl;
+        double binomialPrice = euroCall.priceBinomialTree(n);
+        std::cout << "European Call (Binomial Tree, " << n << " steps): " << binomialPrice << std::endl;
     }
 }
 

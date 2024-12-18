@@ -9,7 +9,7 @@ using namespace std;
 AmericanOption::AmericanOption(bool isCall, double s, double k, double t, double sigma, double r, double q)
     : OptionBase(isCall,s, k, t, sigma, r, q) {}
 
-double AmericanOption::priceBlackScholes() {
+void AmericanOption::priceBlackScholes() {
     std::cout << "Method not applicable to option type given." << std::endl;
 }
 
@@ -55,7 +55,8 @@ double AmericanOption::priceBinomialTree(int n_steps) {
                 // here it differs from European options
                 binomialValues[i] = std::max(k - prices[i], binomialValues[i]);
             }
+        }
     }
     
     return binomialValues[0];
-}
+};

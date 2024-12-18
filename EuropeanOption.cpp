@@ -52,6 +52,7 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
             binomialValues[i] = std::max(0.0, k - prices[i]);
         }
     }
+    std::cout << binomialValues << std::endl;
 
     // back step (calculate binomialValues at preceding levels) until root
     for (int j = n_steps; j >= 1; --j) {
