@@ -27,7 +27,7 @@ double EuropeanOption::priceBlackScholes() {
 }
 
 double EuropeanOption::priceBinomialTree(int n_steps) {
-    dt = t / n_steps;
+    double dt = t / n_steps;
 
     // volatility matching as by CRR
     double u = std::exp(-sigma / sqrt(dt));
@@ -36,7 +36,7 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
 
      // generate stock prices at terminal nodes
     std::vector<double> prices(n_steps + 1);
-    prices[0] = std::pow(u, n_steps)
+    prices[0] = std::pow(u, n_steps);
     for (int i = 1; i <= n_steps; ++i) {
         prices[i] = prices[i-1] * d;
     }
@@ -45,19 +45,19 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     std::vector<double> binomialValues(n_steps + 1);
     if (isCall){
         for (int i = 0; i <= n_steps; ++i) {
-            bionomialValues[i] = max(0, prices[i] - k);
+            binomialValues[i] = std::max(0.0, prices[i] - k);
         }
     } else {
         for (int i = 0; i <= n_steps; ++i) {
-            bionomialValues[i] = max(0, k - prices[i]);
+            binomialValues[i] = std::max(0.0, k - prices[i]);
         }
     }
 
     // back step (calculate binomialValues at preceding levels) until root
-    for (j = n_steps; j >= 1; --j) {
+    for (int j = n_steps; j >= 1; --j) {
         // at each step, update binomialValues at each level
-        for (i = 0; i <= j; ++i) {
-            binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValus[i+1];
+        for (int i = 0; i <= j; ++i) {
+            binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValues[i+1];
             // discount by rates given
             binomialValues[i] *= std::exp((q-r) * dt);
         }

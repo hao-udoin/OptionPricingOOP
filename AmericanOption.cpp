@@ -22,7 +22,7 @@ double AmericanOption::priceBinomialTree(int n_steps) {
     double p = (std::exp((r-q)*dt) - d) / (u-d);
 
     std::vector<double> prices(n_steps + 1);
-    prices[0] = std::pow(u, n_steps)
+    prices[0] = std::pow(u, n_steps);
     for (int i = 1; i <= n_steps; ++i) {
         prices[i] = prices[i-1] * d;
     }
@@ -30,30 +30,30 @@ double AmericanOption::priceBinomialTree(int n_steps) {
     std::vector<double> binomialValues(n_steps + 1);
     if (isCall) {
         for (int i = 0; i <= n_steps; ++i) {
-            bionomialValues[i] = max(0, prices[i] - k);
+            binomialValues[i] = std::max(0.0, prices[i] - k);
         }
     } else {
         for (int i = 0; i <= n_steps; ++i) {
-            bionomialValues[i] = max(0, k - prices[i]);
+            binomialValues[i] = std::max(0.0, k - prices[i]);
         }
     }
 
     if (isCall) {
         for (int j = n_steps; j >= 1; --j) {
             for (int i = 0; i <= j; ++i) {
-                binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValus[i+1];
+                binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValues[i+1];
                 binomialValues[i] *= exp((q-r) * dt);
                 // here it differs from European options
-                binomialValues[i] = max(prices[i] - k, binomialValues[i])
+                binomialValues[i] = std::max(prices[i] - k, binomialValues[i]);
             }
         }     
     } else {
         for (int j = n_steps; j >= 1; --j) {
             for (int i = 0; i <= j; ++i) {
-                binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValus[i+1];
+                binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValues[i+1];
                 binomialValues[i] *= exp((q-r) * dt);
                 // here it differs from European options
-                binomialValues[i] = max(k - prices[i], binomialValues[i])
+                binomialValues[i] = std::max(k - prices[i], binomialValues[i]);
             }
     }
     
