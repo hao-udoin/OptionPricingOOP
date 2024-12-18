@@ -15,17 +15,17 @@ void testOptionPricing() {
     double q = 0.02;   // Dividend yield
 
     // Create European and American options
-    EuropeanOption euroCall(isCall, S, K, T, sigma, r, q);
-    AmericanOption amerCall(isCall, S, K, T, sigma, r, q);
+    EuropeanOption euroCall(true, S, K, T, sigma, r, q);
+    AmericanOption amerCall(true, S, K, T, sigma, r, q);
 
     // Price European option using Black-Scholes
-    double bsPrice = euroCall.price();
+    double bsPrice = euroCall.priceBlackScholes();
     std::cout << "European Call (Black-Scholes): " << bsPrice << std::endl;
 
     // Price American option using binomial tree with increasing steps
     std::vector<int> steps = {10, 50, 100, 500, 1000};
     for (int n : steps) {
-        double binomialPrice = amerCall.binomialTreePrice(n);
+        double binomialPrice = amerCall.priceBinomialTree(n);
         std::cout << "American Call (Binomial Tree, " << n << " steps): " << binomialPrice << std::endl;
     }
 }
