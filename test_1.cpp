@@ -25,7 +25,7 @@ void testOptionPricing() {
     std::cout << std::endl;
 
     // Price European option using binomial tree with increasing steps
-    std::vector<int> steps = {1, 2, 10};
+    std::vector<int> steps = {1, 2, 5, 10};
     for (int n : steps) {
         std::cout << "European Call (Binomial Tree, " << n << " steps): " << std::endl;
         double binomialPrice = euroCall.priceBinomialTree(n);

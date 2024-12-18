@@ -52,8 +52,9 @@ double AmericanOption::priceBinomialTree(int n_steps) {
                 binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValues[i+1];
                 binomialValues[i] *= std::exp((q-r) * dt);
                 // here it differs from European options
+                prices[i] *= d;
                 binomialValues[i] = std::max(prices[i] - k, binomialValues[i]);
-                std::cout << std::fixed << std::setprecision(2) << prices[i] << " ";
+                std::cout << std::fixed << std::setprecision(2) << binomialValues[i] << " ";
             }
             std::cout << std::endl;
         }     
@@ -64,8 +65,9 @@ double AmericanOption::priceBinomialTree(int n_steps) {
                 binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValues[i+1];
                 binomialValues[i] *= std::exp((q-r) * dt);
                 // here it differs from European options
+                prices[i] *= d;
                 binomialValues[i] = std::max(k - prices[i], binomialValues[i]);
-                std::cout << std::fixed << std::setprecision(2) << prices[i] << " ";
+                std::cout << std::fixed << std::setprecision(2) << binomialValues[i] << " ";
             }
             std::cout << std::endl;
         }
