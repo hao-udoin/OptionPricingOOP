@@ -1,9 +1,10 @@
 ## Project Overview
 
-This project focuses on implementing option pricing models for European-style and American-style call and put options. Using object-oriented programming principles, the project builds a modular framework to calculate option prices via two primary methods:
+This project focuses on implementing option pricing models for European-style and American-style call and put options. Using object-oriented programming principles, the project builds a modular framework to calculate option prices via three primary methods:
 
 * Black-Scholes Formula: An analytical method for option pricing.
 * Binomial Tree Method: A numerical method that approximates option prices through iterative calculations.
+* Trinomial Tree Method: An extension of the binomial tree method accounting for the scenario that the price remains unchanged in dt.
 
 The implementation includes a base class (`OptionBase`) and a derived class (`EuropeanOption`,`AmericanOption`) that extends functionality for options. The project highlights the accuracy of results, numerical stability, and the flexibility to extend the framework for other option types.
 
@@ -33,6 +34,7 @@ The `EuropeanOption` class inherits from `OptionBase` and provides specific impl
 Methods:
 * `priceBlackScholes()`: Implements the Black-Scholes formula.
 * `priceBinomialTree(int n_steps)`: Implements a binomial tree for pricing.
+* `priceTrinomialTree(int n_steps)`: Implements a btrinomial tree for pricing.
 
 ### EuropeanOption.cpp
 
