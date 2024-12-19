@@ -65,15 +65,13 @@ This file implements the methods declared in `AmericanOption.h`:
 
 `priceBlackScholes()`:
 
-* The price of an american option could not be calculated by black scholes model.
+* This methods states that the Black-Scholes model cannot be appled to American option, because the model does not account for early exercise of American options.
 
 `priceBinomialTree(int n_steps)`:
 * Divides the time to expiration into n_steps.
 * Generates stock prices at terminal nodes and calculates option values using a backward induction algorithm.
 * Accounts for the up (u), down (d), and risk-neutral probability (p).
-
-Helper Function:
-* normalCDF(double x): Computes the cumulative distribution function for the normal distribution.
+* Incorporates early exercise, which distinguishes it from the European option pricing model. 
 
 ## Challenges Faced
 Precision in Numerical Methods:
