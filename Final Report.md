@@ -52,6 +52,7 @@ This file implements the methods declared in `EuropeanOption.h`:
 
 Helper Function:
 * normalCDF(double x): Computes the cumulative distribution function for the normal distribution.
+* payoff(double underlying): Calculates the intrinsic value (payoff) of the option based on the underlying stock price.
 
 ### AmericanOption.h
 
@@ -73,7 +74,10 @@ This file implements the methods declared in `AmericanOption.h`:
 * Divides the time to expiration into n_steps.
 * Generates stock prices at terminal nodes and calculates option values using a backward induction algorithm.
 * Accounts for the up (u), down (d), and risk-neutral probability (p).
-* Incorporates early exercise, which distinguishes it from the European option pricing model. 
+* Incorporates early exercise, which distinguishes it from the European option pricing model.
+
+`payoff(double underlying)`:
+* A helper function that calculates the intrinsic value (payoff) of the option based on the underlying stock price.
 
 ## Challenges Faced
 Precision in Numerical Methods:
@@ -87,3 +91,18 @@ Code Optimization:
 * Balancing readability and performance was necessary for maintaining clean and efficient code.
 
 ## Conclusion
+This project successfully demonstrates the implementation of option pricing models for European-style and American-style options using object-oriented programming principles. By applying modular design, the framework provides flexibility for integrating additional option types or pricing methods in the future.
+
+The **Black-Scholes formula** offers an analytical benchmark for European options, delivering fast and accurate results under its model assumptions. On the other hand, the **binomial and trinomial tree methods** extend this capability to handle scenarios involving American options and more complex payoffs. These numerical methods allow for customizable accuracy by increasing the number of steps, at the cost of computational complexity.
+
+### **Key Findings**:
+1. **Accuracy**: Trinomial trees exhibit faster convergence to theoretical values than binomial trees for the same number of steps, demonstrating improved stability.
+2. **Flexibility**: The framework accommodates both call and put options, and the addition of early exercise logic in the American option pricing model highlights its adaptability.
+3. **Efficiency**: Careful design of numerical algorithms ensures computational efficiency without sacrificing readability.
+
+### **Future Work**:
+- Extending the framework to price **exotic options** such as barrier, Asian, or lookback options.
+- Incorporating models beyond Black-Scholes, such as **Heston's stochastic volatility model** or **jump-diffusion models**.
+- Exploring parallel computing techniques to optimize tree-based methods for high-resolution calculations.
+
+This implementation validates the practical use of object-oriented programming in financial engineering and provides a robust tool for exploring and analyzing option pricing strategies.
