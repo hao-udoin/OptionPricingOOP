@@ -120,3 +120,12 @@ double EuropeanOption::priceTrinomialTree(int n_steps) {
     // return the option price at the root of the tree
     return trinomialValues[0];
 }
+
+double EuropeanOption::payoff(double underlying) {
+    double payoff = 0;
+    if (isCall) {
+        payoff = std::max(0.0, underlying - k);
+    } else {
+        payoff = std::max(0.0, k - underlying);
+    }
+}

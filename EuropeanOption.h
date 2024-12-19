@@ -10,6 +10,8 @@ class EuropeanOption : public OptionBase {
         double priceBlackScholes();
         double priceBinomialTree(int n_steps);
         double priceTrinomialTree(int n_steps);
+
+        double payoff(double underlying);
         
     private:
 
