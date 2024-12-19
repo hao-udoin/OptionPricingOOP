@@ -34,10 +34,11 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     // volatility matching as by CRR
     double u = std::exp(sigma * std::sqrt(dt));
     double d = 1 / u;
-    double p = (std::exp((r-q)*dt) - d) / (u-d);
+    double p_u = (std::exp((r-q)*dt) - d) / (u-d);
+    double p_d = 1 - p_u;
 
     std::cout << "u: " << std::fixed << std::setprecision(2) << u 
-              << " d: " << d << " p: " << p << std::endl;
+              << " d: " << d << " p_u: " << p_u << " p_d: " << p_d << std::endl;
 
     // generate stock prices at terminal nodes
     std::vector<double> prices(n_steps + 1);
@@ -62,7 +63,7 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     for (int j = n_steps; j >= 1; --j) {
         // at each step, update binomialValues at each level
         for (int i = 0; i < j; ++i) {
-            binomialValues[i] = p * binomialValues[i] + (1-p) * binomialValues[i+1];
+            binomialValues[i] = p_u * binomialValues[i] + (p_d) * binomialValues[i+1];
             // discount by rates given
             binomialValues[i] *= std::exp((q-r) * dt);
         }
@@ -72,3 +73,50 @@ double EuropeanOption::priceBinomialTree(int n_steps) {
     return binomialValues[0];
 }
 
+double EuropeanOption::priceTrinomialTree(int n_steps) {
+    double dt = t / n_steps;
+
+    // volatility matching as by CRR
+    double u = std::exp(sigma * std::sqrt(3 * dt));
+    double d = 1 / u;
+    double p_u = (1.0/6.0) + std::sqrt(dt / (12 * sigma*sigma)) * (r - q - sigma*sigma/2);
+    double p_d = (1.0/6.0) - std::sqrt(dt / (12 * sigma*sigma)) * (r - q - sigma*sigma/2);
+    double p_m  = 2.0/3.0;
+
+    std::cout << "u: " << std::fixed << std::setprecision(2) << u 
+              << " d: " << d << " p_u: " << p_u << " p_d: " << p_d << std::endl;
+
+    // generate stock prices at terminal nodes
+    std::vector<double> prices(2 * n_steps + 1);
+    prices[0] = s * std::pow(u, n_steps);
+    for (int i = 1; i <= 2 * n_steps; ++i) {
+        prices[i] = prices[i-1] * d;
+    }
+
+    // generate option values at terminal nodes
+    std::vector<double> trinomialValues(2 * n_steps + 1);
+    if (isCall){
+        for (int i = 0; i <= n_steps; ++i) {
+            trinomialValues[i] = std::max(0.0, prices[i] - k);
+        }
+    } else {
+        for (int i = 0; i <= n_steps; ++i) {
+            trinomialValues[i] = std::max(0.0, k - prices[i]);
+        }
+    }
+
+    // back step (calculate binomialValues at preceding levels) until root
+    for (int j = n_steps; j >= 1; --j) {
+        // at each step, update binomialValues at each level
+        for (int i = 0; i < 2 * j; ++i) {
+            trinomialValues[i] = p_u * trinomialValues[i] 
+                                + p_m * trinomialValues[i+1] 
+                                + p_d * trinomialValues[i+2];
+            // discount by rates given
+            trinomialValues[i] *= std::exp((q-r) * dt);
+        }
+    }
+
+    // return the option price at the root of the tree
+    return trinomialValues[0];
+}
