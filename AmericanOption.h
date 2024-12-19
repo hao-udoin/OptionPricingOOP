@@ -9,6 +9,7 @@ class AmericanOption : public OptionBase {
     
         void priceBlackScholes();
         double priceBinomialTree(int n_steps);
+        double priceTrinomialTree(int n_steps);
 
     private:
 
