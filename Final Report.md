@@ -65,7 +65,7 @@ This file implements the methods declared in `AmericanOption.h`:
 
 `priceBlackScholes()`:
 
-* This methods states that the Black-Scholes model cannot be appled to American option, because the model does not account for early exercise of American options.
+* This methods states that the Black-Scholes model cannot be applied to American option, because the model does not account for early exercise of American options.
 
 `priceBinomialTree(int n_steps)`:
 * Divides the time to expiration into n_steps.
