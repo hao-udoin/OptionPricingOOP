@@ -51,6 +51,30 @@ This file implements the methods declared in `EuropeanOption.h`:
 Helper Function:
 * normalCDF(double x): Computes the cumulative distribution function for the normal distribution.
 
+### AmericanOption.h
+
+The `AmericanOption` class inherits from `OptionBase` and provides specific implementations for pricing American call and put options using:
+
+Methods:
+* `priceBlackScholes()`: Implements the Black-Scholes formula.
+* `priceBinomialTree(int n_steps)`: Implements a binomial tree for pricing.
+
+### AmericanOption.cpp
+
+This file implements the methods declared in `AmericanOption.h`:
+
+`priceBlackScholes()`:
+
+* The price of an american option could not be calculated by black scholes model.
+
+`priceBinomialTree(int n_steps)`:
+* Divides the time to expiration into n_steps.
+* Generates stock prices at terminal nodes and calculates option values using a backward induction algorithm.
+* Accounts for the up (u), down (d), and risk-neutral probability (p).
+
+Helper Function:
+* normalCDF(double x): Computes the cumulative distribution function for the normal distribution.
+
 ## Challenges Faced
 Precision in Numerical Methods:
 * Ensuring accuracy in the Black-Scholes formula and binomial tree calculations was critical.
